@@ -1,0 +1,258 @@
+<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="author" content="Rémi PICARD"><title>JPA / Hibernate</title><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"><link href="reveal.js/css/reveal.css" rel="stylesheet"><link rel="stylesheet" href="reveal.js/css/theme/white.css" id="theme"><link href="reveal.js/lib/css/atelier-seaside-dark.css" rel="stylesheet"><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>JPA / Hibernate</h1><div class="preamble"><div class="paragraph"><p>Mapping objet-relationnel avec Java</p></div></div><p class="author"><small>Rémi PICARD</small></p></section>
+<section><section id="_prsentation"><h2>Présentation</h2></section><section id="_orm"><h2>ORM</h2><div class="ulist"><ul><li><p><strong>O</strong>bject-<strong>R</strong>elational <strong>M</strong>apping</p></li><li><p>Abstraction d&#8217;une base de données relationnelle</p></li><li><p>Le développeur ne manipule que des objets</p></li></ul></div></section><section id="_jpa"><h2>JPA</h2><div class="ulist"><ul><li><p><strong>J</strong>ava <strong>P</strong>ersistent <strong>A</strong>PI = Standard JEE</p><div class="ulist"><ul><li><p>Structuration des données</p></li><li><p>Gestion accès base de données</p></li><li><p>Interrogation des données</p></li></ul></div></li><li><p>Inspiré des EJB Entity</p></li></ul></div></section><section id="_hibernate"><h2>Hibernate</h2><div class="ulist"><ul><li><p>Implémentation de JPA (« provider »)</p></li><li><p>RedHat / JBoss</p></li><li><p>Début années 2000</p></li><li><p>Autres implémentations (EclipseLink, OpenJPA)</p></li></ul></div></section></section>
+<section><section id="_concepts"><h2>Concepts</h2></section><section id="_entit"><h2>Entité</h2><div class="ulist"><ul><li><p>Objet Java à sauvegarder</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">import javax.persistence.*; //Import JPA
+@Entity //Annotation
+@Table(name = "personne") //Détails table en base de données
+public class Personne {
+    @Id
+    private Integer id;
+
+    @Basic
+    private String firstName;
+    @Basic
+    private String lastName;
+
+    // données Java simples, valeurs multiples ...
+
+    public Personne() { }
+}</code></pre></div></div></section><section id="_connexion_aux_donnes"><h2>Connexion aux données</h2><table class="tableblock frame-all grid-all" style="width:100%"><colgroup><col style="width:33.3333%"><col style="width:33.3333%"><col style="width:33.3334%"></colgroup><thead><tr><th class="tableblock halign-left valign-top">JPA</th><th class="tableblock halign-left valign-top">JBDC</th><th class="tableblock halign-left valign-top">Description</th></tr></thead><tbody><tr><td class="tableblock halign-left valign-top"><p class="tableblock">EntityManagerFactory</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">DriverManager</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Récupération de la connexion</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">EntityManager</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Connection</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Connexion</p></td></tr></tbody></table>
+<div class="admonitionblock note"><table><tr><td class="icon"><div class="title">Note</div></td><td class="content"><div class="paragraph"><p>@PersistenceContext permet de récupérer l&#8217;EntityManager</p></div></td></tr></table></div></section><section id="_types_de_sessions"><h2>Types de sessions</h2><div class="ulist"><ul><li><p>RESOURCE_LOCAL &#8658; gérée par l&#8217;application (Java SE)</p></li><li><p>JTA (<strong>J</strong>ava <strong>T</strong>ransaction <strong>A</strong>PI) &#8658; gérée par le serveur d&#8217;application (Java EE)</p></li></ul></div></section></section>
+<section><section id="_paramtrage"><h2>Paramétrage</h2></section><section id="_mappings"><h2>Mappings</h2><div class="ulist"><ul><li><p>XML</p><div class="ulist"><ul><li><p>1 seul fichier externe au code source</p></li></ul></div></li><li><p>Annotations</p><div class="ulist"><ul><li><p>+ intuitive</p></li><li><p>- verbeuse</p></li><li><p>1 seule partie à maintenir</p></li></ul></div></li></ul></div></section><section id="_paramtrage_orm"><h2>Paramétrage ORM</h2><div class="ulist"><ul><li><p>persistence.xml, hibernate.properties</p><div class="ulist"><ul><li><p>Unité de persistance</p></li><li><p>Framework utilisé par JPA</p></li><li><p>Entités à mapper</p></li><li><p>Driver / URL / Login / Mot de passe d&#8217;accès à la base de données</p></li></ul></div></li></ul></div></section></section>
+<section><section id="_interrogation_des_donnes"><h2>Interrogation des données</h2></section><section id="_sql_natif"><h2>SQL natif</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Query q = em.createNativeQuery("SELECT p.id,p.nom "
+                            + "FROM Personne p "
+                            + "WHERE p.id = 1", Personne.class);
+Personne resultat = (Personne) q.getSingleResult();</code></pre></div></div></section><section id="_jpql"><h2>JPQL</h2><div class="ulist"><ul><li><p><strong>J</strong>ava <strong>P</strong>ersistence <strong>Q</strong>uery <strong>L</strong>anguage</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Query q = em.createQuery("SELECT p "
+                        + "FROM Personne p "
+                        + "WHERE p.id = 1", Personne.class);
+Personne resultat = q.getSingleResult();</code></pre></div></div></section><section id="_requtes_nommes"><h2>Requêtes nommées</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Entity
+@NamedQueries({
+    @NamedQuery(name="Personne.findById",
+                query="SELECT p.id,p.nom "
+                    + "FROM Personne p "
+                    + "WHERE p.id = 1")
+})
+public class Personne { //... }</code></pre></div></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Personne p = em.createNamedQuery("Personne.findById", Personne.class)
+               .setParameter("id", 1)
+               .getSingleResult();</code></pre></div></div></section><section id="_requtes_implicites"><h2>Requêtes « implicites »</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">Personne p = em.createQuery("SELECT p "
+                        + "FROM Personne p "
+                        + "WHERE p.id = 1", Personne.class)
+               .getSingleResult();
+p.getTelephones(); //Requête « implicite » ICI</code></pre></div></div></section><section id="_api_criteria"><h2>API Criteria</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">//Création requête
+CriteriaQuery cq = em.getCriteriaBuilder().createQuery(Personne.class);
+Root&lt;Personne&gt; r = cq.from(Personne.class);
+cq.select(r);
+
+//Exécution
+List&lt;Personne&gt; personnes = em.createQuery(cq).getResultList();</code></pre></div></div></section><section id="_api_criteria_avantages"><h2>API Criteria - Avantages</h2><div class="ulist"><ul><li><p>Typage</p></li><li><p>Construction dynamique</p></li></ul></div></section></section>
+<section><section id="_dfinition_entit"><h2>Définition Entité</h2></section><section id="_clefs_primaires"><h2>Clefs primaires</h2><div class="dlist"><dl><dt class="hdlist1">@Id</dt><dd><p>clef simple</p></dd><dt class="hdlist1">@EmbeddedId</dt><dd><p>clef composée via objet et constructeur</p></dd></dl></div></section><section id="_valeurs_gnres"><h2>Valeurs générées</h2></section><section id="_valeur_fixe"><h2>Valeur fixe</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Column(columnDefinition="default '10'")</code></pre></div></div></section><section id="_valeur_incrmentielle"><h2>Valeur incrémentielle</h2><div class="dlist"><dl><dt class="hdlist1">AUTO</dt><dd><p>gérée par l&#8217;ORM, séquence unique pour tout le schéma (hibernate_sequence)</p></dd><dt class="hdlist1">IDENTITY</dt><dd><p>gérée par le SGBD (MySQL : AUTO_INCREMENT)</p></dd><dt class="hdlist1">TABLE</dt><dd><p>gérée par l&#8217;ORM, séquence par table (hibernate_sequence)</p></dd><dt class="hdlist1">SEQUENCE</dt><dd><p>séquence définie par le SGBD</p></dd></dl></div></section><section id="_relations"><h2>Relations</h2><div class="paragraph"><p><strong>Intéractions</strong> entre les entités.</p></div></section><section id="_relation_1_1"><h2>Relation 1-1</h2><div class="ulist"><ul><li><p>1 objet composé avec 1 autre objet : 1 personne a un détail</p></li><li><p>Classe intégrable : ajout de colonnes dans table mère</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Entity
+public class Personne {
+    @Embedded
+    private PersonneDetail personneDetail; // Composition avec un objet
+}</code></pre></div></div></section><section id="_relation_1_1_2"><h2>Relation 1-1</h2><div class="paragraph"><p>@OneToOne : stockage dans 2 tables différentes</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Entity
+public class Personne {
+    @OneToOne //Mapping
+    @JoinColumn(name = "id_personne") // Clef étrangère
+    private PersonneDetail personneDetail; // Composition avec un objet
+}</code></pre></div></div></section><section id="_relation_1_n"><h2>Relation 1-n</h2><div class="ulist"><ul><li><p>@OneToMany</p></li><li><p>1 objet composé avec 1 liste d&#8217;objets</p></li><li><p>1 personne a plusieurs téléphones</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Entity
+public class Personne {
+    @OneToMany //Mapping
+    @JoinColumn(name = "personne_id") //Clef étrangère
+    private List&lt;Telephone&gt; telephoneList;//Composition avec une liste de téléphones
+}</code></pre></div></div></section><section id="_relation_n_n"><h2>Relation n-n</h2><div class="ulist"><ul><li><p>@ManyToMany : valeur <strong>multiple des 2 côtés</strong> de la relation</p></li><li><p>1 même langue est parlée dans plusieurs pays</p></li><li><p>1 pays a plusieurs langues parlées</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Entity
+public class Langue {
+
+    @JoinTable(name = "pays_langue", joinColumns = {
+        @JoinColumn(name = "id_langue", referencedColumnName = "id")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_pays", referencedColumnName = "id")})
+    @ManyToMany
+    private List&lt;Pays&gt; paysList;
+}</code></pre></div></div></section><section id="_relation_n_n_avec_donnes_sur_la_jointure"><h2>Relation n-n avec données sur la jointure</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Entity
+public class PersonneAdresse {
+    @Basic(optional = false)
+    @Column(name = "principale")
+    private boolean principale;
+    @JoinColumn(name = "id_adresse", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Adresse adresse;
+    @JoinColumn(name = "id_personne", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(optional = false)
+    private Personne personne;
+}
+@Entity
+public class Personne {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personne")
+    private List&lt;PersonneAdresse&gt; personneAdresseList;
+}
+@Entity
+public class Adresse {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "adresse")
+    private List&lt;PersonneAdresse&gt; personneAdresseList;
+}</code></pre></div></div></section><section id="_directions"><h2>Directions</h2><div class="ulist"><ul><li><p>Unidirectionnelle : @OneToMany <strong>OU</strong> @ManyToOne</p></li><li><p>Bidirectionnelle : @OneToMany <strong>ET</strong> @ManyToOne</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">@Entity
+public class Personne {
+    @OneToMany(mappedBy = "idPersonne")
+    private Collection&lt;Telephone&gt; telephoneList; //List, Set ...
+}
+@Entity //Entité propriétaire de la relation
+public class Telephone {
+    @JoinColumn(name = "id_personne", referencedColumnName = "id")
+    @ManyToOne
+    private Personne idPersonne;
+}</code></pre></div></div>
+<div class="admonitionblock warning"><table><tr><td class="icon"><div class="title">Warning</div></td><td class="content">Une relation bidirectionnelle est plus compliquée à maintenir</td></tr></table></div></section><section id="_converter"><h2>Converter</h2><div class="ulist"><ul><li><p>Converti d&#8217;un type de données à un autre.</p></li><li><p>JSON/Objet, XML/Objet &#8230;&#8203;</p></li></ul></div></section></section>
+<section><section id="_manipulation_des_donnes"><h2>Manipulation des données</h2></section><section id="_transaction"><h2>Transaction</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">EntityTransaction tr = em.getTransaction();
+try {
+    // Début de la transaction
+    tr.begin();
+
+    // Exécution des requêtes...
+
+    //Validation de la transaction
+    tr.commit();
+} catch (Exception e) {
+    //Annulation de la transaction
+    tr.rollback();
+}</code></pre></div></div></section><section id="_mthodes_jpa_rcupration"><h2>Méthodes JPA - Récupération</h2><div class="ulist"><ul><li><p>find()</p><div class="ulist"><ul><li><p>Recherche via clef primaire</p></li><li><p>Retourne null si non trouvée</p></li></ul></div></li><li><p>getReference()</p><div class="ulist"><ul><li><p>Chargement différé</p></li><li><p>EntityNotFoundException si non trouvée</p></li></ul></div></li></ul></div></section><section id="_type_de_chargement_des_donnes"><h2>Type de chargement des données</h2><div class="ulist"><ul><li><p>« fetch type »</p></li><li><p>EAGER : charge entités reliés au moment du <strong>chargement de l&#8217;entité principale</strong>.</p></li><li><p>LAZY : charge les relations entre les entités au moment de la <strong>1ère exécution du getter</strong>.</p></li></ul></div></section><section id="_eager_vs_lazy"><h2>EAGER VS LAZY</h2><div class="ulist"><ul><li><p>LAZY évite une surconsommation mémoire</p></li><li><p>LAZY oblige que l&#8217;EntityManager soit toujours actif</p></li></ul></div>
+<div class="admonitionblock warning"><table><tr><td class="icon"><div class="title">Warning</div></td><td class="content">Si l&#8217;EntityManager n&#8217;est plus actif, on obtient la célèbre LazyInitializationException.</td></tr></table></div></section><section id="_chargement_par_dfaut"><h2>Chargement par défaut</h2><table class="tableblock frame-all grid-all" style="width:100%"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><thead><tr><th class="tableblock halign-left valign-top">Type</th><th class="tableblock halign-left valign-top">Chargement</th></tr></thead><tbody><tr><td class="tableblock halign-left valign-top"><p class="tableblock">@Basic</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">EAGER</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">@OneToOne</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">EAGER</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">@ManyToOne</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">EAGER</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">@OneToMany</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">LAZY</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">@ManyToMany</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">LAZY</p></td></tr></tbody></table></section><section id="_entit_manage_non_manage"><h2>Entité managée / non managée</h2><div class="dlist"><dl><dt class="hdlist1">Managée</dt><dd><p>présente dans le contexte de persistence = récupérée/créée par EntityManager</p></dd><dt class="hdlist1">Non Managée</dt><dd><p>récupérée en dehors du contexte de persistence / transaction OU créée par constructeur</p></dd></dl></div>
+<div class="paragraph"><p>L&#8217;entité est-elle managée ?</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">em.contains(entity)</code></pre></div></div></section><section id="_mthodes_jpa_sauvegarde_modification"><h2>Méthodes JPA - Sauvegarde / Modification</h2><div class="ulist"><ul><li><p>persist() : crée ou met à jour une <strong>entité managée</strong>.</p></li><li><p>merge() : crée ou met à jour une <strong>entité NON managée</strong> ET retourne une entité managée.</p></li></ul></div></section><section id="_mthodes_jpa_suppression"><h2>Méthodes JPA - Suppression</h2><div class="ulist"><ul><li><p>remove() : supprime une entité managée</p></li></ul></div>
+<div class="admonitionblock warning"><table><tr><td class="icon"><div class="title">Warning</div></td><td class="content">En cas de relations existantes, il faut également supprimer les liens entre les entités.</td></tr></table></div></section><section id="_oprations_en_cascade"><h2>Opérations en cascade</h2><div class="ulist"><ul><li><p>Concerne [@OneToOne, @OneToMany, @ManyToMany]</p></li><li><p>Option cascade=CascadeType&#8230;&#8203;</p></li><li><p>CascadeType.ALL = [DETACH, MERGE, PERSIST, REMOVE, REFRESH]</p></li></ul></div></section><section id="_mthodes_jpa_synchronisation"><h2>Méthodes JPA - Synchronisation</h2><div class="dlist"><dl><dt class="hdlist1">flush()</dt><dd><p>Force la sauvegarde de l&#8217;entité en base (avant la fin de la transaction)</p></dd><dt class="hdlist1">refresh(entity)</dt><dd><p>Raffraichissement de l&#8217;entité (depuis le dernier persist)</p></dd></dl></div></section></section>
+<section><section id="_api_criteria_2"><h2>API Criteria</h2></section><section id="_5_parties"><h2>5 parties</h2><div class="ulist"><ul><li><p>Type d&#8217;opération (SELECT, UPDATE, DELETE)</p></li><li><p>Scope / Périmètre (FROM + JOIN)</p></li><li><p>Restrictions (WHERE)</p></li><li><p>Regroupement (GROUP BY + HAVING)</p></li><li><p>Tri (ORDER BY)</p></li></ul></div></section><section id="_api_metamodel"><h2>API Metamodel</h2><div class="dlist"><dl><dt class="hdlist1">Metamodel</dt><dd><p>Image des différentes entités utilisées</p><div class="ulist"><ul><li><p>Dynamique (par chaine de caractères)</p></li><li><p>Statique (code généré, Entity_) &#8658; typage des requêtes</p></li></ul></div></dd></dl></div></section><section id="_construction_liste_de_critres"><h2>Construction liste de critères</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">public List&lt;Personne&gt; rechercher(String nom, String prenom) {
+    EntityManager em = getEntityManager();
+
+    CriteriaBuilder cb = em.getCriteriaBuilder();
+    CriteriaQuery&lt;Personne&gt; cq = cb.createQuery(Personne.class);
+
+    Root&lt;Personne&gt; p = cq.from(Personne.class);
+
+    List&lt;Predicate&gt; lstPredicate = new ArrayList&lt;&gt;();
+    if (nom != null &amp;&amp; !"".equals(nom.trim())) {
+        lstPredicate.add(cb.like(p.get(Personne_.nom), nom.trim()));
+    }
+    if (prenom != null &amp;&amp; !"".equals(prenom.trim())) {
+        lstPredicate.add(cb.like(p.get(Personne_.prenom), prenom.trim()));
+    }
+    if (!lstPredicate.isEmpty()) {
+        cq.where(lstPredicate.toArray(new Predicate[lstPredicate.size()]));
+    }
+
+    cq.select(p).distinct(true);
+    return em.createQuery(cq).getResultList();
+}</code></pre></div></div></section><section id="_jointure"><h2>Jointure</h2><div class="ulist"><ul><li><p>Join = jointure</p></li></ul></div>
+<div class="admonitionblock note"><table><tr><td class="icon"><div class="title">Note</div></td><td class="content">Condition de jointure personnalisable via méthode on()</td></tr></table></div>
+<div class="ulist"><ul><li><p>Fetch = jointure <strong>AVEC</strong> récupération de données</p></li></ul></div>
+<div class="admonitionblock note"><table><tr><td class="icon"><div class="title">Note</div></td><td class="content">Fetch extends Join</td></tr></table></div></section><section id="_multiselect"><h2>Multiselect</h2><div class="ulist"><ul><li><p>Sélection des colonnes à retourner</p></li><li><p>Evite de retourner tous les champs</p></li><li><p>Retourne Objet[], Tuple, POJO</p></li></ul></div></section></section>
+<section><section id="_cycle_de_vie_des_donnes"><h2>Cycle de vie des données</h2></section><section id="_intercepteur_evnements"><h2>Intercepteur / Evénements</h2><div class="ulist"><ul><li><p>Interceptor (avant requête, avant commit)</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>hibernate.ejb.interceptor=</code></pre></div></div>
+<div class="ulist"><ul><li><p>Evénements</p></li></ul></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code>@Entity
+public static class MyEntityWithCallbacks {
+    @PrePersist void onPrePersist() {}
+    @PostPersist void onPostPersist() {}
+    @PostLoad void onPostLoad() {}
+    @PreUpdate void onPreUpdate() {}
+    @PostUpdate void onPostUpdate() {}
+    @PreRemove void onPreRemove() {}
+    @PostRemove void onPostRemove() {}
+}</code></pre></div></div></section><section id="_cache"><h2>Cache</h2><div class="ulist"><ul><li><p>Propre espace de mémoire pour stocker temporairement les données</p></li><li><p>2 niveaux de Cache : L1 et L2</p></li><li><p>Entité dans L1 ? Entité dans L2 ? SQL</p></li></ul></div></section><section id="_cache_de_niveau_1_l1"><h2>Cache de niveau 1 (L1)</h2><div class="ulist"><ul><li><p>EntityManager</p></li><li><p>Portée : Transaction</p></li></ul></div></section><section id="_cache_de_niveau_2_l2"><h2>Cache de niveau 2 (L2)</h2><div class="ulist"><ul><li><p>EntityManagerFactory</p></li><li><p>Global à la JVM, réplicable sur plusieurs JVM</p></li><li><p>JCache (EhCache, InfiniteSpan)</p></li><li><p>Configurable (@Cacheable)</p></li></ul></div></section></section>
+<section><section id="_outils"><h2>Outils</h2></section><section id="_entits_schma"><h2>Entités &#8658; Schéma</h2><div class="listingblock"><div class="content"><pre class="highlight"><code class="javascript language-javascript">hibernate.hbm2ddl.auto=create</code></pre></div></div></section><section id="_gnration_metamodel"><h2>Génération MetaModel</h2><div class="paragraph"><p>pom.xml</p></div>
+<div class="listingblock"><div class="content"><pre class="highlight"><code class="xml language-xml">&lt;dependency&gt;
+    &lt;groupId&gt;org.hibernate&lt;/groupId&gt;
+    &lt;artifactId&gt;hibernate-jpamodelgen&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;!-- ... --&gt;
+&lt;plugin&gt;
+    &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
+    &lt;configuration&gt;
+        &lt;compilerArguments&gt;
+            &lt;processor&gt;org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor&lt;/processor&gt;
+        &lt;/compilerArguments&gt;
+    &lt;/configuration&gt;
+&lt;/plugin&gt;</code></pre></div></div></section></section>
+<section id="_choisir_d_utiliser_un_orm_ou_pas"><h2>Choisir d&#8217;utiliser un ORM ou pas ?</h2><table class="tableblock frame-all grid-all" style="width:100%"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><thead><tr><th class="tableblock halign-left valign-top">+</th><th class="tableblock halign-left valign-top">-</th></tr></thead><tbody><tr><td class="tableblock halign-left valign-top"><p class="tableblock">Projet de grande taille</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Performances attendues</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">Mixer avec et sans ORM</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Perte de contrôle sur le SQL</p></td></tr></tbody></table></section>
+<section id="_source"><h2>Source</h2><div class="imageblock" style=""><img src="assets/jpa-et-java-hibernate-apprenez-le-mapping-objet-relationnel-orm-avec-java.jpg" alt="jpa et java hibernate apprenez le mapping objet relationnel orm avec java" width="375" height="464"></div><div class="title">Figure 1. JPA et Java Hibernate - Martial BANON, ENI éditions</div></section>
+<section id="_questions"><h2>Questions</h2></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
+Reveal.initialize({
+  // Display controls in the bottom right corner
+  controls: true,
+  // Display a presentation progress bar
+  progress: true,
+  // Display the page number of the current slide
+  slideNumber: true,
+  // Push each slide change to the browser history
+  history: true,
+  // Enable keyboard shortcuts for navigation
+  keyboard: true,
+  // Enable the slide overview mode
+  overview: true,
+  // Vertical centering of slides
+  center: true,
+  // Enables touch navigation on devices with touch input
+  touch: true,
+  // Loop the presentation
+  loop: false,
+  // Change the presentation direction to be RTL
+  rtl: false,
+  // Turns fragments on and off globally
+  fragments: true,
+  // Flags if the presentation is running in an embedded mode,
+  // i.e. contained within a limited portion of the screen
+  embedded: false,
+  // Number of milliseconds between automatically proceeding to the
+  // next slide, disabled when set to 0, this value can be overwritten
+  // by using a data-autoslide attribute on your slides
+  autoSlide: 0,
+  // Stop auto-sliding after user input
+  autoSlideStoppable: true,
+  // Enable slide navigation via mouse wheel
+  mouseWheel: true,
+  // Hides the address bar on mobile devices
+  hideAddressBar: true,
+  // Opens links in an iframe preview overlay
+  previewLinks: false,
+  // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
+  // NOTE setting the theme in the config no longer works in reveal.js 3.x
+  //theme: Reveal.getQueryHash().theme || 'white',
+  // Transition style (e.g., none, fade, slide, convex, concave, zoom)
+  transition: Reveal.getQueryHash().transition || 'slide',
+  // Transition speed (e.g., default, fast, slow)
+  transitionSpeed: 'default',
+  // Transition style for full page slide backgrounds (e.g., none, fade, slide, convex, concave, zoom)
+  backgroundTransition: 'fade',
+  // Number of slides away from the current that are visible
+  viewDistance: 3,
+  // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
+  parallaxBackgroundImage: 'assets/ballons.jpg',
+  // Parallax background size in CSS syntax (e.g., "2100px 900px")
+  parallaxBackgroundSize: '1920px 1280px',
+
+  // The "normal" size of the presentation, aspect ratio will be preserved
+  // when the presentation is scaled to fit different resolutions. Can be
+  // specified using percentage units.
+  width: 960,
+  height: 700,
+
+  // Factor of the display size that should remain empty around the content
+  margin: 0.1,
+
+  // Bounds for smallest/largest possible scale to apply to content
+  minScale: 0.2,
+  maxScale: 1.5,
+
+  // Optional libraries used to extend on reveal.js
+  dependencies: [
+      { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+  ]
+});</script></body></html>
