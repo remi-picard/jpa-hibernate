@@ -529,6 +529,6 @@ https://www.editions-eni.fr/livre/jpa-et-java-hibernate-apprenez-le-mapping-obje
 
 == Démonstration
 - https://github.com/remi-picard/jpa-hibernate[Github]
-- https://github.com/remi-picard/jpa-hibernate/src/main/java/com/github/remipicard/main/Demo.java[Code Source]
+- https://github.com/remi-picard/jpa-hibernate/blob/master/src/main/java/com/github/remipicard/main/Demo.java[Code Source]
  
 == Questions

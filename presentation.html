@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="author" content="Rémi PICARD"><title>JPA / Hibernate</title><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"><link href="reveal.js/css/reveal.css" rel="stylesheet"><link rel="stylesheet" href="reveal.js/css/theme/white.css" id="theme"><link href="reveal.js/lib/css/atelier-seaside-dark.css" rel="stylesheet"><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>JPA / Hibernate</h1><div class="preamble"><div class="paragraph"><p>Mapping objet-relationnel avec Java</p></div></div><p class="author"><small>Rémi PICARD</small></p></section>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="author" content="Rémi PICARD"><title>JPA / Hibernate</title><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui" name="viewport"><link href="reveal.js/css/reveal.css" rel="stylesheet"><link rel="stylesheet" href="reveal.js/css/theme/black.css" id="theme"><link href="reveal.js/lib/css/zenburn.css" rel="stylesheet"><script>document.write( '<link rel="stylesheet" href="reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );</script></head><body><div class="reveal"><div class="slides"><section class="title" data-state="title"><h1>JPA / Hibernate</h1><div class="preamble"><div class="paragraph"><p>Mapping objet-relationnel avec Java</p></div></div><p class="author"><small>Rémi PICARD</small></p></section>
 <section><section id="_prsentation"><h2>Présentation</h2></section><section id="_orm"><h2>ORM</h2><div class="ulist"><ul><li><p><strong>O</strong>bject-<strong>R</strong>elational <strong>M</strong>apping</p></li><li><p>Abstraction d&#8217;une base de données relationnelle</p></li><li><p>Le développeur ne manipule que des objets</p></li></ul></div></section><section id="_jpa"><h2>JPA</h2><div class="ulist"><ul><li><p><strong>J</strong>ava <strong>P</strong>ersistent <strong>A</strong>PI = Standard JEE</p><div class="ulist"><ul><li><p>Structuration des données</p></li><li><p>Gestion accès base de données</p></li><li><p>Interrogation des données</p></li></ul></div></li><li><p>Inspiré des EJB Entity</p></li></ul></div></section><section id="_hibernate"><h2>Hibernate</h2><div class="ulist"><ul><li><p>Implémentation de JPA (« provider »)</p></li><li><p>RedHat / JBoss</p></li><li><p>Début années 2000</p></li><li><p>Autres implémentations (EclipseLink, OpenJPA)</p></li></ul></div></section></section>
 <section><section id="_concepts"><h2>Concepts</h2></section><section id="_entit"><h2>Entité</h2><div class="ulist"><ul><li><p>Objet Java à sauvegarder</p></li></ul></div>
 <div class="listingblock"><div class="content"><pre class="highlight"><code class="java language-java">import javax.persistence.*; //Import JPA
@@ -177,7 +177,9 @@ public static class MyEntityWithCallbacks {
     &lt;/configuration&gt;
 &lt;/plugin&gt;</code></pre></div></div></section></section>
 <section id="_choisir_d_utiliser_un_orm_ou_pas"><h2>Choisir d&#8217;utiliser un ORM ou pas ?</h2><table class="tableblock frame-all grid-all" style="width:100%"><colgroup><col style="width:50%"><col style="width:50%"></colgroup><thead><tr><th class="tableblock halign-left valign-top">+</th><th class="tableblock halign-left valign-top">-</th></tr></thead><tbody><tr><td class="tableblock halign-left valign-top"><p class="tableblock">Projet de grande taille</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Performances attendues</p></td></tr><tr><td class="tableblock halign-left valign-top"><p class="tableblock">Mixer avec et sans ORM</p></td><td class="tableblock halign-left valign-top"><p class="tableblock">Perte de contrôle sur le SQL</p></td></tr></tbody></table></section>
-<section id="_source"><h2>Source</h2><div class="imageblock" style=""><img src="assets/jpa-et-java-hibernate-apprenez-le-mapping-objet-relationnel-orm-avec-java.jpg" alt="jpa et java hibernate apprenez le mapping objet relationnel orm avec java" width="375" height="464"></div><div class="title">Figure 1. JPA et Java Hibernate - Martial BANON, ENI éditions</div></section>
+<section id="_source"><h2>Source</h2><div class="imageblock" style=""><img src="assets/jpa-et-java-hibernate-apprenez-le-mapping-objet-relationnel-orm-avec-java.jpg" alt="jpa et java hibernate apprenez le mapping objet relationnel orm avec java" width="375" height="464"></div><div class="title">Figure 1. JPA et Java Hibernate - Martial BANON, ENI éditions</div>
+<div class="paragraph"><p><a href="https://www.editions-eni.fr/livre/jpa-et-java-hibernate-apprenez-le-mapping-objet-relationnel-orm-avec-java-9782409005824">Référence</a></p></div></section>
+<section id="_dmonstration"><h2>Démonstration</h2><div class="ulist"><ul><li><p><a href="https://github.com/remi-picard/jpa-hibernate">Github</a></p></li><li><p><a href="https://github.com/remi-picard/jpa-hibernate/blob/master/src/main/java/com/github/remipicard/main/Demo.java">Code Source</a></p></li></ul></div></section>
 <section id="_questions"><h2>Questions</h2></section></div></div><script src="reveal.js/lib/js/head.min.js"></script><script src="reveal.js/js/reveal.js"></script><script>// See https://github.com/hakimel/reveal.js#configuration for a full list of configuration options
 Reveal.initialize({
   // Display controls in the bottom right corner
@@ -185,9 +187,9 @@ Reveal.initialize({
   // Display a presentation progress bar
   progress: true,
   // Display the page number of the current slide
-  slideNumber: true,
+  slideNumber: false,
   // Push each slide change to the browser history
-  history: true,
+  history: false,
   // Enable keyboard shortcuts for navigation
   keyboard: true,
   // Enable the slide overview mode
@@ -212,14 +214,14 @@ Reveal.initialize({
   // Stop auto-sliding after user input
   autoSlideStoppable: true,
   // Enable slide navigation via mouse wheel
-  mouseWheel: true,
+  mouseWheel: false,
   // Hides the address bar on mobile devices
   hideAddressBar: true,
   // Opens links in an iframe preview overlay
   previewLinks: false,
   // Theme (e.g., beige, black, league, night, serif, simple, sky, solarized, white)
   // NOTE setting the theme in the config no longer works in reveal.js 3.x
-  //theme: Reveal.getQueryHash().theme || 'white',
+  //theme: Reveal.getQueryHash().theme || 'black',
   // Transition style (e.g., none, fade, slide, convex, concave, zoom)
   transition: Reveal.getQueryHash().transition || 'slide',
   // Transition speed (e.g., default, fast, slow)
@@ -229,9 +231,9 @@ Reveal.initialize({
   // Number of slides away from the current that are visible
   viewDistance: 3,
   // Parallax background image (e.g., "'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg'")
-  parallaxBackgroundImage: 'assets/ballons.jpg',
+  parallaxBackgroundImage: '',
   // Parallax background size in CSS syntax (e.g., "2100px 900px")
-  parallaxBackgroundSize: '1920px 1280px',
+  parallaxBackgroundSize: '',
 
   // The "normal" size of the presentation, aspect ratio will be preserved
   // when the presentation is scaled to fit different resolutions. Can be
@@ -251,7 +253,7 @@ Reveal.initialize({
       { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
       { src: 'reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
       { src: 'reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: 'reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      
       { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
       { src: 'reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
   ]

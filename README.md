@@ -33,7 +33,33 @@ bundle --path=.bundle/gems --binstubs=.bundle/.bin
 git clone -b 3.3.0 --depth 1 https://github.com/hakimel/reveal.js.git
 ```
 
-### Génération
+### Génération HTML / JS
 ```
 bundle exec asciidoctor-revealjs .\presentation.adoc
+```
+
+## PDF
+
+### Installation
+http://asciidoctor.org/docs/asciidoctor-pdf/
+
+### Génération
+- Remplacer l'entête revealjs de presentation.adoc par :
+
+```
+= JPA / Hibernate
+Rémi PICARD <picard.remi@gmail.com>
+:doctype: book
+:reproducible:
+:source-highlighter: coderay
+:listing-caption: Listing
+:pdf-page-size: Letter
+
+Mapping objet-relationnel avec Java
+```
+
+- Générer :
+
+```
+asciidoctor-pdf presentation.adoc
 ```
