@@ -525,5 +525,10 @@ pom.xml
 == Source
 .JPA et Java Hibernate - Martial BANON, ENI éditions
 image::assets/jpa-et-java-hibernate-apprenez-le-mapping-objet-relationnel-orm-avec-java.jpg[,375,464]
+https://www.editions-eni.fr/livre/jpa-et-java-hibernate-apprenez-le-mapping-objet-relationnel-orm-avec-java-9782409005824[Référence]
 
+== Démonstration
+- https://github.com/remi-picard/jpa-hibernate[Github]
+- https://github.com/remi-picard/jpa-hibernate/src/main/java/com/github/remipicard/main/Demo.java[Code Source]
+ 
 == Questions
